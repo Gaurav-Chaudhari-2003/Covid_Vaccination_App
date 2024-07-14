@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AddSlotActivity">
+
+    <!-- Vaccine Type Radio Buttons -->
+    <RadioGroup
+        android:id="@+id/vaccineRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioCovishield"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Covishield" />
+
+        <RadioButton
+            android:id="@+id/radioCovaxin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Covaxin" />
+    </RadioGroup>
+
+    <!-- Date Picker -->
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Date"
+        android:padding="8dp" />
+
+    <!-- Time Picker From -->
+    <TextView
+        android:id="@+id/fromTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select From Time"
+        android:padding="8dp" />
+
+    <!-- Time Picker To -->
+    <TextView
+        android:id="@+id/toTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select To Time"
+        android:padding="8dp" />
+
+    <!-- Country Spinner -->
+    <Spinner
+        android:id="@+id/countrySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
+    <!-- State Spinner -->
+    <Spinner
+        android:id="@+id/stateSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
+    <!-- Division Spinner -->
+    <Spinner
+        android:id="@+id/divisionSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
+    <!-- Subdivision Spinner -->
+    <Spinner
+        android:id="@+id/subdivisionSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
+    <!-- Add Slot Button -->
+    <Button
+        android:id="@+id/addSlotButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Slot"
+        android:padding="16dp" />
+</LinearLayout>

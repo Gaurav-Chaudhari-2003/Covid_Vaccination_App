@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Covid Vaccination App</string>
+    <string name="select_country">Select Country</string>
+    <string name="select_state">Select State</string>
+    <string name="select_division">Select Division</string>
+    <string name="select_subdivision">Select Subdivision</string>
+
+    <string-array name="countries_array">
+        <item>India</item>
+        <item>Shri Lanka</item>
+        <!-- Add more countries here -->
+    </string-array>
+
+    <string-array name="states_array">
+        <item>Maharashtra</item>
+        <item>Gujarat</item>
+        <!-- Add more states here -->
+    </string-array>
+
+    <string-array name="divisions_array">
+        <item>Jalgaon</item>
+        <item>Buldhana</item>
+        <!-- Add more subdivisions here -->
+    </string-array>
+
+    <string-array name="subdivisions_array">
+        <item>Raver</item>
+        <item>Shegaon</item>
+        <!-- Add more Subdivision here -->
+    </string-array>
+</resources>

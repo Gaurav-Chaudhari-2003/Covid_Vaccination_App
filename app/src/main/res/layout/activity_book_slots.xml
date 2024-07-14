@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BookSlotsActivity">
+
+    <RadioGroup
+        android:id="@+id/vaccineRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioCovishield"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Covishield" />
+
+        <RadioButton
+            android:id="@+id/radioCovaxin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Covaxin" />
+    </RadioGroup>
+
+    <Spinner
+        android:id="@+id/countrySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vaccineRadioGroup"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/stateSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/countrySpinner"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/divisionSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stateSpinner"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/subdivisionSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divisionSpinner"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subdivisionSpinner"
+        android:layout_marginTop="16dp"
+        android:hint="Select Date"
+        android:padding="10dp"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/white"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/checkSlotsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateTextView"
+        android:layout_marginTop="16dp"
+        android:text="Check Slots" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/slotsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkSlotsButton"
+        android:layout_marginTop="16dp" />
+</RelativeLayout>

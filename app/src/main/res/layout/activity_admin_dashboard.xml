@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/addSlotButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Slot" />
+
+    <Button
+        android:id="@+id/fetchUserRecordsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fetch User Records" />
+
+    <Button
+        android:id="@+id/viewAllSlotsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View All Slots" />
+
+    <Button
+        android:id="@+id/viewAllUsersButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View All Users" />
+
+    <Button
+        android:id="@+id/updateSlotButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Slot" />
+
+    <Button
+        android:id="@+id/deleteSlotButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Slot" />
+
+    <Button
+        android:id="@+id/viewReportsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Reports" />
+
+    <Button
+        android:id="@+id/sendNotificationsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Notifications" />
+
+    <Button
+        android:id="@+id/userDashboardButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User DashBoard" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log Out" />
+
+</LinearLayout>

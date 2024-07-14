@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210246604454",
+    "project_id": "covid-vaccination-app-5a380",
+    "storage_bucket": "covid-vaccination-app-5a380.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210246604454:android:9be14df55b0caf50458667",
+        "android_client_info": {
+          "package_name": "com.gaurav.covidvaccinationapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAMz7H4vFYQv5kllsTHnXMKfhe8lP_dCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
