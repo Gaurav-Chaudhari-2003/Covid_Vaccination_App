@@ -60,11 +60,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/subdivisionSpinner"
         android:layout_marginTop="16dp"
+        android:background="@android:color/darker_gray"
+        android:gravity="center"
         android:hint="Select Date"
         android:padding="10dp"
-        android:background="@android:color/darker_gray"
-        android:textColor="@android:color/white"
-        android:gravity="center" />
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/checkSlotsButton"

@@ -33,19 +33,18 @@
             android:id="@+id/otpEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:hint="Enter OTP"
             android:inputType="number"
-            android:visibility="gone"
-            android:enabled="false"
-            />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/verifyOtpButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="Verify OTP"
-            android:visibility="gone"
-            android:enabled="false"/>
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/addressEditText"
@@ -79,7 +78,7 @@
             android:id="@+id/submitButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:enabled="false" />
+            android:enabled="false"
+            android:text="Submit" />
     </LinearLayout>
 </ScrollView>

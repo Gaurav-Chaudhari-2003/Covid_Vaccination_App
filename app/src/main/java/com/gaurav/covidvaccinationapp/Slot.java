@@ -5,7 +5,7 @@ public class Slot {
     private String slotId;
     private String date;
     private String time;
-    private String location; // New field
+    private String location;
     private String slotBooked;
     private String slotBookedPersonID;
     private String slotGeneratorPersonID;

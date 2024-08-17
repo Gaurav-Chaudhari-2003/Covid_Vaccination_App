@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 checkUserStatus();
             }
-        }, 1000); // Show logo for 2 seconds
+        }, 500); // Show logo for 0.5 seconds
     }
 
     private void checkUserStatus() {

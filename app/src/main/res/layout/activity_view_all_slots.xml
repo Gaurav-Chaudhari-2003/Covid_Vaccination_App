@@ -5,9 +5,35 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/slotsTextView"
+        android:id="@+id/covaxinHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Covaxin Slots"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/covaxinRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:layout_marginTop="16dp"/>
+        android:layout_below="@id/covaxinHeader"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/covishieldHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/covaxinRecyclerView"
+        android:layout_marginTop="16dp"
+        android:text="Covishield Slots"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/covishieldRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/covishieldHeader"
+        android:layout_marginBottom="16dp" />
 </RelativeLayout>

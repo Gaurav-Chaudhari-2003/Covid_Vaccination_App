@@ -8,11 +8,11 @@
         android:id="@+id/covishieldSlotLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:padding="8dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/slot_background"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
 
         <!-- Slot Details -->
 
@@ -23,13 +23,13 @@
             android:text="Covishield"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/covishieldSlotDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Details here"/>
+            android:text="Details here" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,14 +41,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Update"/>
+                android:text="Update" />
 
             <Button
                 android:id="@+id/cancelCovishieldButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cancel"/>
+                android:text="Cancel" />
         </LinearLayout>
     </LinearLayout>
 
@@ -56,11 +56,11 @@
         android:id="@+id/covaxinSlotLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:padding="8dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/slot_background"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
 
         <!-- Slot Details -->
         <TextView
@@ -70,14 +70,13 @@
             android:text="Covaxin"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/covaxinSlotDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Details here"/>
+            android:text="Details here" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,14 +88,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Update"/>
+                android:text="Update" />
 
             <Button
                 android:id="@+id/cancelCovaxinButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cancel"/>
+                android:text="Cancel" />
         </LinearLayout>
     </LinearLayout>
 

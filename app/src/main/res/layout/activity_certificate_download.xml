@@ -7,7 +7,7 @@
         android:id="@+id/btnDownloadCertificate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download Certificate"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:text="Download Certificate" />
 </RelativeLayout>

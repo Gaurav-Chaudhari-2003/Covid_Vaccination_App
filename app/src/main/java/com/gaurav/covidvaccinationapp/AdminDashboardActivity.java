@@ -58,7 +58,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         viewAllSlotsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminDashboardActivity.this, ViewAllSlotsActivity.class));
+                startActivity(new Intent(AdminDashboardActivity.this, VaccineSlotsActivity.class));
             }
         });
 

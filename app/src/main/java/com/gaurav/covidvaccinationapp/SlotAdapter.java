@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,10 +14,6 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
 
     private List<Slot> slotList;
     private OnSlotClickListener onSlotClickListener;
-
-    public interface OnSlotClickListener {
-        void onSlotClick(Slot slot);
-    }
 
     public SlotAdapter(List<Slot> slotList, OnSlotClickListener onSlotClickListener) {
         this.slotList = slotList;
@@ -46,6 +41,10 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
     @Override
     public int getItemCount() {
         return slotList.size();
+    }
+
+    public interface OnSlotClickListener {
+        void onSlotClick(Slot slot);
     }
 
     public static class SlotViewHolder extends RecyclerView.ViewHolder {

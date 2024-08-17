@@ -83,6 +83,6 @@
         android:id="@+id/addSlotButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Slot"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:text="Add Slot" />
 </LinearLayout>

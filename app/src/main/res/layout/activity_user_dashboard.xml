@@ -13,50 +13,50 @@
             android:id="@+id/bookSlotsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Book Slot"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Book Slot" />
 
         <Button
             android:id="@+id/viewBookedSlotsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="View Booked Slots"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="View Booked Slots" />
 
         <Button
             android:id="@+id/vaccinationHistoryButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vaccination History"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Vaccination History" />
 
         <Button
             android:id="@+id/notificationCenterButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Notification Center"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Notification Center" />
 
         <Button
             android:id="@+id/profileManagementButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Profile Management"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Profile Management" />
 
         <Button
             android:id="@+id/helpSupportButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Help-Support"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Help-Support" />
 
         <Button
             android:id="@+id/logoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Logout" />
 
     </LinearLayout>
 </ScrollView>
