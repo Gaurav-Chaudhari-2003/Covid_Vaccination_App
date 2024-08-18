@@ -26,6 +26,23 @@
         android:layout_marginBottom="16dp"
         android:text="" />
 
+    <Button
+        android:id="@+id/covaxinButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userRecordsTextView"
+        android:text="Confirm Covaxin"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/covishieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userRecordsTextView"
+        android:layout_toEndOf="@id/covaxinButton"
+        android:text="Confirm Covishield"
+        android:visibility="gone" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

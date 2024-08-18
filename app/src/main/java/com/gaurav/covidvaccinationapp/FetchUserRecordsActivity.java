@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -20,11 +21,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class FetchUserRecordsActivity extends AppCompatActivity {
     private EditText emailEditText;
-    private Button fetchButton;
+    private Button fetchButton, covaxinButton, covishieldButton;
     private TextView userRecordsTextView;
     private ProgressBar progressBar;
 
     private CollectionReference usersRef;
+    private DocumentSnapshot userDocument;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
         fetchButton = findViewById(R.id.fetchButton);
         userRecordsTextView = findViewById(R.id.userRecordsTextView);
         progressBar = findViewById(R.id.progressBar);
+        covaxinButton = findViewById(R.id.covaxinButton);
+        covishieldButton = findViewById(R.id.covishieldButton);
 
         usersRef = FirebaseFirestore.getInstance().collection("users");
 
@@ -42,6 +46,20 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fetchUserRecords();
+            }
+        });
+
+        covaxinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmVaccination("vaccinated.covaxin.status", "vaccinated.covaxin.slotId");
+            }
+        });
+
+        covishieldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmVaccination("vaccinated.covishield.status", "vaccinated.covishield.slotId");
             }
         });
     }
@@ -61,6 +79,8 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         userRecordsTextView.setText(""); // Clear previous results
+        covaxinButton.setVisibility(View.GONE);
+        covishieldButton.setVisibility(View.GONE);
 
         Query query = usersRef.whereEqualTo("email", email);
         query.get().addOnCompleteListener(task -> {
@@ -70,6 +90,8 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
                 if (!querySnapshot.isEmpty()) {
                     StringBuilder userInfo = new StringBuilder();
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        userDocument = document; // Save the document for later use
+
                         String name = document.getString("name");
                         String mobile = document.getString("mobile");
                         String address = document.getString("address");
@@ -91,6 +113,13 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
                                 .append("Covaxin Status: ").append(covaxinStatus).append("\n")
                                 .append("Covishield Slot: ").append(covishieldSlot).append("\n")
                                 .append("Covishield Status: ").append(covishieldStatus).append("\n\n");
+
+                        if ("booked".equalsIgnoreCase(covaxinStatus)) {
+                            covaxinButton.setVisibility(View.VISIBLE);
+                        }
+                        if ("booked".equalsIgnoreCase(covishieldStatus)) {
+                            covishieldButton.setVisibility(View.VISIBLE);
+                        }
                     }
                     userRecordsTextView.setText(userInfo.toString());
                 } else {
@@ -100,5 +129,19 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
                 Toast.makeText(FetchUserRecordsActivity.this, "Error fetching user records: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void confirmVaccination(String statusPath, String slotPath) {
+        if (userDocument != null) {
+            DocumentReference docRef = userDocument.getReference();
+            docRef.update(statusPath, "vaccinated").addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(FetchUserRecordsActivity.this, "Vaccination confirmed", Toast.LENGTH_SHORT).show();
+                    fetchUserRecords(); // Refresh the data
+                } else {
+                    Toast.makeText(FetchUserRecordsActivity.this, "Failed to confirm vaccination: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
