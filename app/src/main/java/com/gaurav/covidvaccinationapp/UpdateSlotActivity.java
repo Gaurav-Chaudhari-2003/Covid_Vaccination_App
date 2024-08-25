@@ -1,24 +1,38 @@
 package com.gaurav.covidvaccinationapp;
 
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UpdateSlotActivity extends AppCompatActivity {
+    private EditText dateEditText, timeEditText, locationEditText;
+    private FirebaseFirestore firestore;
+    private String documentId;
+    private String vaccineName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_update_slot);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        dateEditText = findViewById(R.id.dateEditText);
+        timeEditText = findViewById(R.id.timeEditText);
+        locationEditText = findViewById(R.id.locationEditText);
+        firestore = FirebaseFirestore.getInstance();
+
+        // Get the intent data
+        documentId = getIntent().getStringExtra("documentId");
+        vaccineName = getIntent().getStringExtra("vaccineName");
+
+        // Populate the UI with existing data
+        dateEditText.setText(getIntent().getStringExtra("date"));
+        timeEditText.setText(getIntent().getStringExtra("time"));
+        locationEditText.setText(getIntent().getStringExtra("location"));
+
+        // Implement your logic to update the slot data here
     }
 }

@@ -1,8 +1,10 @@
 package com.gaurav.covidvaccinationapp;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,11 +33,20 @@ public class VaccineSlotAdapter extends RecyclerView.Adapter<VaccineSlotAdapter.
         holder.summaryTextView.setText(item.getSummary());
         holder.detailsTextView.setText(item.getDetails());
         holder.detailsTextView.setVisibility(item.isExpanded() ? View.VISIBLE : View.GONE);
+        holder.modifyButton.setVisibility(item.isShowModifyButton() ? View.VISIBLE : View.GONE);
 
         holder.itemView.setOnClickListener(v -> {
             item.setExpanded(!item.isExpanded());
             notifyItemChanged(position);
         });
+
+            holder.modifyButton.setOnClickListener(v -> {
+                Intent intent = new Intent(holder.itemView.getContext(), UpdateSlotActivity.class);
+                intent.putExtra("slotId", item.getSlotId());
+                intent.putExtra("vaccineType", item.getVaccineType());
+                intent.putExtra("details", item.getDetails());
+                holder.itemView.getContext().startActivity(intent);
+            });
     }
 
     @Override
@@ -46,11 +57,13 @@ public class VaccineSlotAdapter extends RecyclerView.Adapter<VaccineSlotAdapter.
     public static class VaccineSlotViewHolder extends RecyclerView.ViewHolder {
         TextView summaryTextView;
         TextView detailsTextView;
+        Button modifyButton;
 
         public VaccineSlotViewHolder(@NonNull View itemView) {
             super(itemView);
             summaryTextView = itemView.findViewById(R.id.summaryTextView);
             detailsTextView = itemView.findViewById(R.id.detailsTextView);
+            modifyButton = itemView.findViewById(R.id.modifyButton);
         }
     }
 }
