@@ -30,12 +30,6 @@
         android:text="View All Users" />
 
     <Button
-        android:id="@+id/updateSlotButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update Slot" />
-
-    <Button
         android:id="@+id/deleteSlotButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

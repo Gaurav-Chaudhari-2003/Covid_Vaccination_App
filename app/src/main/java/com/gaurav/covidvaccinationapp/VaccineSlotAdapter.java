@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -41,13 +42,11 @@ public class VaccineSlotAdapter extends RecyclerView.Adapter<VaccineSlotAdapter.
         });
 
         holder.modifyButton.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), UpdateSlotActivity.class);
-            intent.putExtra("slotId", item.getSlotId());
-            intent.putExtra("vaccineType", item.getVaccineType());
-            intent.putExtra("details", item.getDetails());
-            holder.itemView.getContext().startActivity(intent);
+            ModifySlotDialogFragment dialogFragment = ModifySlotDialogFragment.newInstance(item.getSlotId(), item.getVaccineType());
+            dialogFragment.show(((AppCompatActivity) holder.itemView.getContext()).getSupportFragmentManager(), "ModifySlotDialog");
         });
     }
+
 
     @Override
     public int getItemCount() {

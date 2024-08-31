@@ -158,7 +158,7 @@ public class AddSlotActivity extends AppCompatActivity {
             return;
         }
 
-        String location = country + "/" + state + "/" + division + "/" + subdivision;
+        String location = country + ", " + state + ", " + division + ", " + subdivision;
 
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         if (firebaseUser != null) {

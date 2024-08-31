@@ -81,7 +81,7 @@ public class VaccineSlotsActivity extends AppCompatActivity {
                         boolean isOutdated = false;
                         try {
                             Date slotDate = sdf.parse(date);
-                            isOutdated = slotDate.before(sdf.parse(currentDate));
+                            isOutdated = slotDate.before(sdf.parse(currentDate)) || slotDate.equals(sdf.parse(currentDate));
                         } catch (ParseException ex) {
                             ex.printStackTrace();
                         }

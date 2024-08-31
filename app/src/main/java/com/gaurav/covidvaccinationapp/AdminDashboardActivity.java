@@ -25,7 +25,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         Button fetchUserRecordsButton = findViewById(R.id.fetchUserRecordsButton);
         Button viewAllSlotsButton = findViewById(R.id.viewAllSlotsButton);
         Button viewAllUsersButton = findViewById(R.id.viewAllUsersButton);
-        Button updateSlotButton = findViewById(R.id.updateSlotButton);
         Button deleteSlotButton = findViewById(R.id.deleteSlotButton);
         Button viewReportsButton = findViewById(R.id.viewReportsButton);
         Button sendNotificationsButton = findViewById(R.id.sendNotificationsButton);
@@ -37,7 +36,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         fetchUserRecordsButton.setOnClickListener(v -> navigateTo(FetchUserRecordsActivity.class));
         viewAllSlotsButton.setOnClickListener(v -> navigateTo(VaccineSlotsActivity.class));
         viewAllUsersButton.setOnClickListener(v -> navigateTo(ViewAllUsersActivity.class));
-        updateSlotButton.setOnClickListener(v -> navigateTo(UpdateSlotActivity.class));
         deleteSlotButton.setOnClickListener(v -> navigateTo(DeleteSlotActivity.class));
         viewReportsButton.setOnClickListener(v -> navigateTo(ViewReportsActivity.class));
         sendNotificationsButton.setOnClickListener(v -> navigateTo(SendNotificationsActivity.class));
