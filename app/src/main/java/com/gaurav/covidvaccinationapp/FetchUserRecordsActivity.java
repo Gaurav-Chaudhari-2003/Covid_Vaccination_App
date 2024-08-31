@@ -10,12 +10,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -83,13 +88,19 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
         covishieldButton.setVisibility(View.GONE);
 
         Query query = usersRef.whereEqualTo("email", email);
-        query.get().addOnCompleteListener(task -> {
-            progressBar.setVisibility(View.GONE);
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (!querySnapshot.isEmpty()) {
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@NonNull QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                progressBar.setVisibility(View.GONE);
+                if (error != null) {
+                    Toast.makeText(FetchUserRecordsActivity.this, "Error fetching user records: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!value.isEmpty()) {
                     StringBuilder userInfo = new StringBuilder();
-                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                    for (DocumentChange documentChange : value.getDocumentChanges()) {
+                        DocumentSnapshot document = documentChange.getDocument();
                         userDocument = document; // Save the document for later use
 
                         String name = document.getString("name");
@@ -125,8 +136,6 @@ public class FetchUserRecordsActivity extends AppCompatActivity {
                 } else {
                     userRecordsTextView.setText("No user found with the provided email.");
                 }
-            } else {
-                Toast.makeText(FetchUserRecordsActivity.this, "Error fetching user records: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

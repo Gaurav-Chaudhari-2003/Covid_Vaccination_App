@@ -40,13 +40,13 @@ public class VaccineSlotAdapter extends RecyclerView.Adapter<VaccineSlotAdapter.
             notifyItemChanged(position);
         });
 
-            holder.modifyButton.setOnClickListener(v -> {
-                Intent intent = new Intent(holder.itemView.getContext(), UpdateSlotActivity.class);
-                intent.putExtra("slotId", item.getSlotId());
-                intent.putExtra("vaccineType", item.getVaccineType());
-                intent.putExtra("details", item.getDetails());
-                holder.itemView.getContext().startActivity(intent);
-            });
+        holder.modifyButton.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.itemView.getContext(), UpdateSlotActivity.class);
+            intent.putExtra("slotId", item.getSlotId());
+            intent.putExtra("vaccineType", item.getVaccineType());
+            intent.putExtra("details", item.getDetails());
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
 
     @Override

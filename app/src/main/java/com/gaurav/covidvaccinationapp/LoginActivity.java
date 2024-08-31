@@ -43,71 +43,62 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+        loginButton.setOnClickListener(v -> {
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
 
-                if (TextUtils.isEmpty(email)) {
-                    emailEditText.setError("Enter email");
-                    return;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    passwordEditText.setError("Enter password");
-                    return;
-                }
-
-                loginUser(email, password);
+            if (TextUtils.isEmpty(email)) {
+                emailEditText.setError("Enter email");
+                return;
             }
+            if (TextUtils.isEmpty(password)) {
+                passwordEditText.setError("Enter password");
+                return;
+            }
+
+            loginUser(email, password);
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
+        registerButton.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
     }
 
     private void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            if (firebaseUser != null) {
-                                checkUserRole(firebaseUser.getUid());
-                            }
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        if (firebaseUser != null) {
+                            checkUserRole(firebaseUser.getUid());
                         }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
                     }
                 });
     }
 
     private void checkUserRole(String userId) {
-        db.collection("users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String role = document.getString("role");
-                        if ("admin".equals(role)) {
-                            startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
-                        } else {
-                            startActivity(new Intent(LoginActivity.this, UserDashboardActivity.class));
-                        }
-                        finish();
+        db.collection("users").document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String role = document.getString("role");
+                    Intent intent;
+                    if ("admin".equals(role)) {
+                        intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
                     } else {
-                        Toast.makeText(LoginActivity.this, "User data not found", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(LoginActivity.this, UserDashboardActivity.class);
                     }
+                    startActivity(intent);
+                    finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "User data not found", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(LoginActivity.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error fetching user data", task.getException());
             }
         });
     }

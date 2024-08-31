@@ -46,6 +46,15 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        initializeUI();
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        setOnClickListeners();
+    }
+
+    private void initializeUI() {
         nameEditText = findViewById(R.id.nameEditText);
         mobileEditText = findViewById(R.id.mobileEditText);
         otpEditText = findViewById(R.id.otpEditText);
@@ -56,76 +65,71 @@ public class RegisterActivity extends AppCompatActivity {
         sendOtpButton = findViewById(R.id.sendOtpButton);
         verifyOtpButton = findViewById(R.id.verifyOtpButton);
         submitButton = findViewById(R.id.submitButton);
+    }
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-
-        sendOtpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mobile = mobileEditText.getText().toString();
-                if (TextUtils.isEmpty(mobile)) {
-                    mobileEditText.setError("Enter mobile number");
-                    return;
-                }
+    private void setOnClickListeners() {
+        sendOtpButton.setOnClickListener(v -> {
+            String mobile = mobileEditText.getText().toString();
+            if (validateMobile(mobile)) {
                 sendOtp(mobile);
             }
         });
 
-        verifyOtpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String otp = otpEditText.getText().toString();
-                if (TextUtils.isEmpty(otp)) {
-                    otpEditText.setError("Enter OTP");
-                    return;
-                }
-                try {
-                    verifyOtp(otp);
-                } catch (Exception e) {
-                    addressEditText.setText(e.toString());
-                }
+        verifyOtpButton.setOnClickListener(v -> {
+            String otp = otpEditText.getText().toString();
+            if (validateOtp(otp)) {
+                verifyOtp(otp);
             }
         });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerUser();
-            }
-        });
+        submitButton.setOnClickListener(v -> registerUser());
+    }
+
+    private boolean validateMobile(String mobile) {
+        if (TextUtils.isEmpty(mobile)) {
+            mobileEditText.setError("Enter mobile number");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateOtp(String otp) {
+        if (TextUtils.isEmpty(otp)) {
+            otpEditText.setError("Enter OTP");
+            return false;
+        }
+        return true;
     }
 
     private void sendOtp(String mobile) {
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber("+91" + mobile)
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(this)
-                        .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                            @Override
-                            public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-                                signInWithPhoneAuthCredential(credential);
-                            }
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
+                .setPhoneNumber("+91" + mobile)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
+                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
+                        signInWithPhoneAuthCredential(credential);
+                    }
 
-                            @Override
-                            public void onVerificationFailed(@NonNull FirebaseException e) {
-                                Log.w(TAG, "onVerificationFailed", e);
-                                Toast.makeText(RegisterActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
-                                addressEditText.setText(e.toString());
-                            }
+                    @Override
+                    public void onVerificationFailed(@NonNull FirebaseException e) {
+                        Log.w(TAG, "onVerificationFailed", e);
+                        Toast.makeText(RegisterActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+                        addressEditText.setText(e.toString());
+                    }
 
-                            @Override
-                            public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                                RegisterActivity.this.verificationId = verificationId;
-                                Toast.makeText(RegisterActivity.this, "OTP sent", Toast.LENGTH_SHORT).show();
-                                otpEditText.setVisibility(View.VISIBLE);
-                                verifyOtpButton.setVisibility(View.VISIBLE);
-                                verifyOtpButton.setEnabled(true);
-                                otpEditText.setEnabled(true);
-                            }
-                        })
-                        .build();
+                    @Override
+                    public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                        RegisterActivity.this.verificationId = verificationId;
+                        Toast.makeText(RegisterActivity.this, "OTP sent", Toast.LENGTH_SHORT).show();
+                        otpEditText.setVisibility(View.VISIBLE);
+                        verifyOtpButton.setVisibility(View.VISIBLE);
+                        verifyOtpButton.setEnabled(true);
+                        otpEditText.setEnabled(true);
+                    }
+                })
+                .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
@@ -135,25 +139,25 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            mAuth.signOut();
-                            Toast.makeText(RegisterActivity.this, "Phone number verified", Toast.LENGTH_SHORT).show();
-                            submitButton.setEnabled(true);
-                            otpEditText.setVisibility(View.INVISIBLE);
-                            verifyOtpButton.setVisibility(View.INVISIBLE);
-                            otpEditText.setEnabled(false);
-                            verifyOtpButton.setEnabled(false);
-                        } else {
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(RegisterActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                mAuth.signOut();
+                Toast.makeText(RegisterActivity.this, "Phone number verified", Toast.LENGTH_SHORT).show();
+                toggleOtpVerificationUI(false);
+            } else {
+                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                    Toast.makeText(RegisterActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void toggleOtpVerificationUI(boolean isEnabled) {
+        submitButton.setEnabled(isEnabled);
+        otpEditText.setVisibility(isEnabled ? View.INVISIBLE : View.VISIBLE);
+        verifyOtpButton.setVisibility(isEnabled ? View.INVISIBLE : View.VISIBLE);
+        otpEditText.setEnabled(!isEnabled);
+        verifyOtpButton.setEnabled(!isEnabled);
     }
 
     private void registerUser() {
@@ -164,50 +168,46 @@ public class RegisterActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(mobile) || TextUtils.isEmpty(address) ||
-                TextUtils.isEmpty(pincode) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            if (firebaseUser != null) {
-                                String userId = firebaseUser.getUid();
-                                Map<String, Object> user = new HashMap<>();
-                                user.put("name", name);
-                                user.put("mobile", mobile);
-                                user.put("address", address);
-                                user.put("pincode", pincode);
-                                user.put("email", email);
-                                user.put("role", "user");
-
-                                db.collection("users").document(userId)
-                                        .set(user)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                                    finish();
-                                                } else {
-                                                    Toast.makeText(RegisterActivity.this, "Failed to register user", Toast.LENGTH_SHORT).show();
-                                                    addressEditText.setText(Objects.requireNonNull(task.getException()).toString());
-                                                }
-                                            }
-                                        });
-                            }
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                            addressEditText.setText(Objects.requireNonNull(task.getException()).toString());
-                        }
+        if (areFieldsValid(name, mobile, address, pincode, email, password)) {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                    if (firebaseUser != null) {
+                        saveUserData(firebaseUser.getUid(), name, mobile, address, pincode, email);
                     }
-                });
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    addressEditText.setText(Objects.requireNonNull(task.getException()).toString());
+                }
+            });
+        } else {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private boolean areFieldsValid(String name, String mobile, String address, String pincode, String email, String password) {
+        return !TextUtils.isEmpty(name) && !TextUtils.isEmpty(mobile) && !TextUtils.isEmpty(address) &&
+                !TextUtils.isEmpty(pincode) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password);
+    }
+
+    private void saveUserData(String userId, String name, String mobile, String address, String pincode, String email) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("name", name);
+        user.put("mobile", mobile);
+        user.put("address", address);
+        user.put("pincode", pincode);
+        user.put("email", email);
+        user.put("role", "user");
+
+        db.collection("users").document(userId).set(user).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
+            } else {
+                Toast.makeText(RegisterActivity.this, "Failed to register user", Toast.LENGTH_SHORT).show();
+                addressEditText.setText(Objects.requireNonNull(task.getException()).toString());
+            }
+        });
     }
 }

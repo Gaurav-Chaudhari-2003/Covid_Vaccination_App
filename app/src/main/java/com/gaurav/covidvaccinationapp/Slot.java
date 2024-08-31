@@ -1,5 +1,7 @@
 package com.gaurav.covidvaccinationapp;
 
+import java.util.Objects;
+
 public class Slot {
 
     private String slotId;
@@ -15,7 +17,8 @@ public class Slot {
         // Required empty public constructor
     }
 
-    public Slot(String slotId, String date, String time, String location, String slotBooked, String slotBookedPersonID, String slotGeneratorPersonID, String vaccineType) {
+    public Slot(String slotId, String date, String time, String location, String slotBooked,
+                String slotBookedPersonID, String slotGeneratorPersonID, String vaccineType) {
         this.slotId = slotId;
         this.date = date;
         this.time = time;
@@ -88,5 +91,39 @@ public class Slot {
 
     public void setVaccineType(String vaccineType) {
         this.vaccineType = vaccineType;
+    }
+
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "slotId='" + slotId + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", location='" + location + '\'' +
+                ", slotBooked='" + slotBooked + '\'' +
+                ", slotBookedPersonID='" + slotBookedPersonID + '\'' +
+                ", slotGeneratorPersonID='" + slotGeneratorPersonID + '\'' +
+                ", vaccineType='" + vaccineType + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Slot slot = (Slot) o;
+        return Objects.equals(slotId, slot.slotId) &&
+                Objects.equals(date, slot.date) &&
+                Objects.equals(time, slot.time) &&
+                Objects.equals(location, slot.location) &&
+                Objects.equals(slotBooked, slot.slotBooked) &&
+                Objects.equals(slotBookedPersonID, slot.slotBookedPersonID) &&
+                Objects.equals(slotGeneratorPersonID, slot.slotGeneratorPersonID) &&
+                Objects.equals(vaccineType, slot.vaccineType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(slotId, date, time, location, slotBooked, slotBookedPersonID, slotGeneratorPersonID, vaccineType);
     }
 }

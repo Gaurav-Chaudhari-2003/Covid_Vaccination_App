@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,25 +35,31 @@ public class ViewAllUsersActivity extends AppCompatActivity {
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         userList = new ArrayList<>();
-        userAdapter = new UserAdapter(userList);
+        userAdapter = new UserAdapter(this, userList);
 
         usersRecyclerView.setAdapter(userAdapter);
 
-        fetchUsers();
+        fetchUsers();  // Fetch users with real-time updates
     }
 
     private void fetchUsers() {
-        db.collection("users").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        userList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Object> user = document.getData();
-                            userList.add(user);
+        db.collection("users")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
                         }
-                        userAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
+
+                        userList.clear();
+                        if (snapshots != null) {
+                            for (QueryDocumentSnapshot document : snapshots) {
+                                Map<String, Object> user = document.getData();
+                                userList.add(user);
+                            }
+                            userAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
     }

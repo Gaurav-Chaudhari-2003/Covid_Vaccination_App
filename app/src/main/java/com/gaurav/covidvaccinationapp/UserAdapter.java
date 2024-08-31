@@ -1,5 +1,6 @@
 package com.gaurav.covidvaccinationapp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,18 @@ import java.util.Map;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
+    private final Context context;
     private final List<Map<String, Object>> userList;
 
-    public UserAdapter(List<Map<String, Object>> userList) {
+    public UserAdapter(Context context, List<Map<String, Object>> userList) {
+        this.context = context;
         this.userList = userList;
     }
 
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
         return new UserViewHolder(view);
     }
 
@@ -78,28 +81,28 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 if (covaxin != null) {
                     covaxinStatusTextView.setText("Covaxin: " + covaxin.get("status"));
                     covaxinStatusTextView.setTextColor(covaxin.get("status").equals("booked") ?
-                            itemView.getContext().getResources().getColor(android.R.color.holo_blue_dark) :
-                            itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
+                            context.getResources().getColor(android.R.color.holo_blue_dark) :
+                            context.getResources().getColor(android.R.color.holo_red_dark));
                 } else {
                     covaxinStatusTextView.setText("Covaxin: Not vaccinated");
-                    covaxinStatusTextView.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
+                    covaxinStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
                 }
 
                 Map<String, Object> covishield = (Map<String, Object>) vaccinated.get("covishield");
                 if (covishield != null) {
                     covishieldStatusTextView.setText("Covishield: " + covishield.get("status"));
                     covishieldStatusTextView.setTextColor(covishield.get("status").equals("booked") ?
-                            itemView.getContext().getResources().getColor(android.R.color.holo_green_dark) :
-                            itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
+                            context.getResources().getColor(android.R.color.holo_green_dark) :
+                            context.getResources().getColor(android.R.color.holo_red_dark));
                 } else {
                     covishieldStatusTextView.setText("Covishield: Not vaccinated");
-                    covishieldStatusTextView.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
+                    covishieldStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
                 }
             } else {
                 covaxinStatusTextView.setText("Covaxin: Not vaccinated");
                 covishieldStatusTextView.setText("Covishield: Not vaccinated");
-                covaxinStatusTextView.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
-                covishieldStatusTextView.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
+                covaxinStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
+                covishieldStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
             }
 
             itemView.setOnClickListener(v -> {

@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
@@ -23,6 +25,10 @@ public class VaccineSlotsActivity extends AppCompatActivity {
     private RecyclerView covaxinRecyclerView;
     private RecyclerView covishieldRecyclerView;
     private FirebaseFirestore firestore;
+    private VaccineSlotAdapter covaxinAdapter;
+    private VaccineSlotAdapter covishieldAdapter;
+    private List<VaccineSlotItem> covaxinSlotList;
+    private List<VaccineSlotItem> covishieldSlotList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,43 +39,51 @@ public class VaccineSlotsActivity extends AppCompatActivity {
         covishieldRecyclerView = findViewById(R.id.covishieldRecyclerView);
         firestore = FirebaseFirestore.getInstance();
 
+        covaxinSlotList = new ArrayList<>();
+        covishieldSlotList = new ArrayList<>();
+
+        covaxinAdapter = new VaccineSlotAdapter(covaxinSlotList);
+        covishieldAdapter = new VaccineSlotAdapter(covishieldSlotList);
+
         covaxinRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        covaxinRecyclerView.setAdapter(covaxinAdapter);
+
         covishieldRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        covishieldRecyclerView.setAdapter(covishieldAdapter);
 
         fetchAllSlots();
     }
 
     private void fetchAllSlots() {
-        CollectionReference slotsRef = firestore.collection("slots").document("vaccine").collection("covaxin");
+        CollectionReference covaxinRef = firestore.collection("slots").document("vaccine").collection("covaxin");
         CollectionReference covishieldRef = firestore.collection("slots").document("vaccine").collection("covishield");
 
-        fetchSlotsForVaccineType(slotsRef, "Covaxin", covaxinRecyclerView);
-        fetchSlotsForVaccineType(covishieldRef, "Covishield", covishieldRecyclerView);
-    }
+        covaxinRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot snapshot, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(VaccineSlotsActivity.this, "Error fetching Covaxin slots", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-    private void fetchSlotsForVaccineType(CollectionReference collectionRef, String vaccineName, RecyclerView recyclerView) {
-        collectionRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
+                if (snapshot != null) {
                     List<VaccineSlotItem> slotItems = new ArrayList<>();
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     String currentDate = sdf.format(new Date());
 
-                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                    for (DocumentSnapshot document : snapshot.getDocuments()) {
                         String date = document.getString("date");
                         String time = document.getString("time");
                         String slotId = document.getString("slotId");
                         String slotBookedPersonID = document.getString("slotBookedPersonID");
                         String slotBooked = document.getString("slotBooked");
 
-                        // Check if the slot is outdated and not booked by anyone
                         boolean isOutdated = false;
                         try {
                             Date slotDate = sdf.parse(date);
                             isOutdated = slotDate.before(sdf.parse(currentDate));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
                         }
 
                         boolean showModifyButton = (slotBookedPersonID == null || slotBookedPersonID.equals("null")) && isOutdated;
@@ -82,16 +96,65 @@ public class VaccineSlotsActivity extends AppCompatActivity {
                                 + "Slot Booked Person ID: " + slotBookedPersonID + "\n"
                                 + "Slot Generator Person ID: " + document.getString("slotGeneratorPersonID") + "\n"
                                 + "Slot ID: " + slotId + "\n"
-                                + "Vaccine Type: " + vaccineName;
+                                + "Vaccine Type: Covaxin";
 
-                        slotItems.add(new VaccineSlotItem(summary, details, showModifyButton, document.getId(), vaccineName));
+                        slotItems.add(new VaccineSlotItem(summary, details, showModifyButton, slotId, "covaxin"));
                     }
 
-                    VaccineSlotAdapter adapter = new VaccineSlotAdapter(slotItems);
-                    recyclerView.setAdapter(adapter);
+                    covaxinSlotList.clear();
+                    covaxinSlotList.addAll(slotItems);
+                    covaxinAdapter.notifyDataSetChanged();
                 }
-            } else {
-                Toast.makeText(VaccineSlotsActivity.this, "Error fetching slots", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        covishieldRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot snapshot, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(VaccineSlotsActivity.this, "Error fetching Covishield slots", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (snapshot != null) {
+                    List<VaccineSlotItem> slotItems = new ArrayList<>();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    String currentDate = sdf.format(new Date());
+
+                    for (DocumentSnapshot document : snapshot.getDocuments()) {
+                        String date = document.getString("date");
+                        String time = document.getString("time");
+                        String slotId = document.getString("slotId");
+                        String slotBookedPersonID = document.getString("slotBookedPersonID");
+                        String slotBooked = document.getString("slotBooked");
+
+                        boolean isOutdated = false;
+                        try {
+                            Date slotDate = sdf.parse(date);
+                            isOutdated = slotDate.before(sdf.parse(currentDate));
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                        }
+
+                        boolean showModifyButton = (slotBookedPersonID == null || slotBookedPersonID.equals("null")) && isOutdated;
+
+                        String summary = "Slot ID: " + slotId + "\nDate: " + date + "\tTime: " + time;
+                        String details = "Date: " + date + "\n"
+                                + "Time: " + time + "\n"
+                                + "Location: " + document.getString("location") + "\n"
+                                + "Slot Booked: " + slotBooked + "\n"
+                                + "Slot Booked Person ID: " + slotBookedPersonID + "\n"
+                                + "Slot Generator Person ID: " + document.getString("slotGeneratorPersonID") + "\n"
+                                + "Slot ID: " + slotId + "\n"
+                                + "Vaccine Type: Covishield";
+
+                        slotItems.add(new VaccineSlotItem(summary, details, showModifyButton, slotId, "covishield"));
+                    }
+
+                    covishieldSlotList.clear();
+                    covishieldSlotList.addAll(slotItems);
+                    covishieldAdapter.notifyDataSetChanged();
+                }
             }
         });
     }

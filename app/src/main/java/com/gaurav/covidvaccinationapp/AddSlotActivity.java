@@ -15,12 +15,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Calendar;
 
@@ -54,74 +59,52 @@ public class AddSlotActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // Set up date picker
-        dateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePicker();
-            }
-        });
+        dateTextView.setOnClickListener(v -> showDatePicker());
 
         // Set up time pickers
-        fromTimeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePicker(fromTimeTextView);
-            }
-        });
-
-        toTimeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePicker(toTimeTextView);
-            }
-        });
+        fromTimeTextView.setOnClickListener(v -> showTimePicker(fromTimeTextView));
+        toTimeTextView.setOnClickListener(v -> showTimePicker(toTimeTextView));
 
         // Set up dropdown lists
         setupDropdownLists();
 
-        addSlotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addSlot();
-            }
-        });
+        addSlotButton.setOnClickListener(v -> addSlot());
 
-        // Fetch current slot IDs for Covishield and Covaxin
-        fetchCurrentSlotIds();
+        // Listen for real-time slot ID updates
+        listenForRealTimeSlotUpdates();
     }
 
-    private void fetchCurrentSlotIds() {
+    private void listenForRealTimeSlotUpdates() {
         DocumentReference vaccineRef = db.collection("slots").document("vaccine");
-        vaccineRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                currentCovishieldSlotId = task.getResult().getString("covishield");
-                currentCovaxinSlotId = task.getResult().getString("covaxin");
-            } else {
-                Toast.makeText(AddSlotActivity.this, "Failed to fetch current slot IDs", Toast.LENGTH_SHORT).show();
+        vaccineRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(AddSlotActivity.this, "Failed to load slot IDs", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    currentCovishieldSlotId = snapshot.getString("covishield");
+                    currentCovaxinSlotId = snapshot.getString("covaxin");
+                }
             }
         });
     }
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = dayOfMonth + "/" + (month + 1) + "/" + year;
-                dateTextView.setText(date);
-            }
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            String date = dayOfMonth + "/" + (month + 1) + "/" + year;
+            dateTextView.setText(date);
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
     private void showTimePicker(final TextView timeTextView) {
         Calendar calendar = Calendar.getInstance();
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String time = hourOfDay + ":" + String.format("%02d", minute);
-                timeTextView.setText(time);
-            }
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+            String time = hourOfDay + ":" + String.format("%02d", minute);
+            timeTextView.setText(time);
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         timePickerDialog.show();
     }
@@ -139,17 +122,17 @@ public class AddSlotActivity extends AppCompatActivity {
         stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         stateSpinner.setAdapter(stateAdapter);
 
+        // Set up division spinner
+        ArrayAdapter<CharSequence> divisionAdapter = ArrayAdapter.createFromResource(this,
+                R.array.divisions_array, android.R.layout.simple_spinner_item);
+        divisionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        divisionSpinner.setAdapter(divisionAdapter);
+
         // Set up subdivision spinner
         ArrayAdapter<CharSequence> subdivisionAdapter = ArrayAdapter.createFromResource(this,
-                R.array.divisions_array, android.R.layout.simple_spinner_item);
-        subdivisionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        divisionSpinner.setAdapter(subdivisionAdapter);
-
-        // Set up village spinner
-        ArrayAdapter<CharSequence> villageAdapter = ArrayAdapter.createFromResource(this,
                 R.array.subdivisions_array, android.R.layout.simple_spinner_item);
-        villageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subdivisionSpinner.setAdapter(villageAdapter);
+        subdivisionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subdivisionSpinner.setAdapter(subdivisionAdapter);
     }
 
     private void addSlot() {
@@ -204,19 +187,11 @@ public class AddSlotActivity extends AppCompatActivity {
 
     private void updateSlotId(String vaccineType) {
         DocumentReference vaccineRef = db.collection("slots").document("vaccine");
-        vaccineRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String currentSlotId = task.getResult().getString(vaccineType);
-                int newSlotId = Integer.parseInt(currentSlotId) + 1;
-                vaccineRef.update(vaccineType, String.valueOf(newSlotId))
-                        .addOnCompleteListener(updateTask -> {
-                            if (!updateTask.isSuccessful()) {
-                                Toast.makeText(AddSlotActivity.this, "Failed to update slot ID", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            } else {
-                Toast.makeText(AddSlotActivity.this, "Failed to fetch current slot ID", Toast.LENGTH_SHORT).show();
-            }
-        });
+        vaccineRef.update(vaccineType, String.valueOf(Integer.parseInt(currentCovishieldSlotId) + 1))
+                .addOnCompleteListener(updateTask -> {
+                    if (!updateTask.isSuccessful()) {
+                        Toast.makeText(AddSlotActivity.this, "Failed to update slot ID", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

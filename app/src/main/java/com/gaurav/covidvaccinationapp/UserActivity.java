@@ -19,18 +19,14 @@ public class UserActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UserActivity.this, LoginActivity.class));
-            }
-        });
+        // Check if buttons are not null
+        if (btnLogin != null && btnRegister != null) {
+            btnLogin.setOnClickListener(v -> startActivity(new Intent(UserActivity.this, LoginActivity.class)));
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UserActivity.this, RegisterActivity.class));
-            }
-        });
+            btnRegister.setOnClickListener(v -> startActivity(new Intent(UserActivity.this, RegisterActivity.class)));
+        } else {
+            // Handle the case where buttons could not be found
+            // For example, logging the error or showing an alert
+        }
     }
 }

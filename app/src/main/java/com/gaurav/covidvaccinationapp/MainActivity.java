@@ -24,46 +24,49 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkUserStatus();
-            }
-        }, 500); // Show logo for 0.5 seconds
+        // Delay checking user status to show logo/splash screen
+        new Handler().postDelayed(this::checkUserStatus, 500); // Show logo for 0.5 seconds
     }
 
     private void checkUserStatus() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // User is signed in, check if they are admin or user
+            // User is signed in, check their role
             db.collection("users").document(currentUser.getUid()).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String role = document.getString("role");
-                        if ("admin".equals(role)) {
-                            // Navigate to Admin Dashboard
-                            startActivity(new Intent(MainActivity.this, AdminDashboardActivity.class));
-                        } else {
-                            // Navigate to User Dashboard
-                            startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
-                        }
-                        finish();
+                        navigateToDashboard(role);
                     } else {
-                        // User data not found, navigate to Login
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
+                        // User data not found
+                        navigateToLogin();
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
+                    navigateToLogin();
                 }
             });
         } else {
-            // No user is signed in, navigate to Login
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
+            // No user is signed in
+            navigateToLogin();
         }
+    }
+
+    private void navigateToDashboard(String role) {
+        Intent intent;
+        if ("admin".equals(role)) {
+            intent = new Intent(MainActivity.this, AdminDashboardActivity.class);
+        } else {
+            intent = new Intent(MainActivity.this, UserDashboardActivity.class);
+        }
+        startActivity(intent);
+        finish();
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

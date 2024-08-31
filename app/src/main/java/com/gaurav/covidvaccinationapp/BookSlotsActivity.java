@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class BookSlotsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private SlotAdapter slotAdapter;
     private List<Slot> slotList;
+    private ListenerRegistration slotsListenerRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,14 @@ public class BookSlotsActivity extends AppCompatActivity {
         checkSlotsButton.setOnClickListener(v -> checkAvailableSlots());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (slotsListenerRegistration != null) {
+            slotsListenerRegistration.remove();
+        }
+    }
+
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
@@ -75,7 +86,6 @@ public class BookSlotsActivity extends AppCompatActivity {
         // Set minimum date to today
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
-
     }
 
     private void setupDropdownLists() {
@@ -124,23 +134,32 @@ public class BookSlotsActivity extends AppCompatActivity {
             return;
         }
 
-        db.collection("slots").document("vaccine")
+        if (slotsListenerRegistration != null) {
+            slotsListenerRegistration.remove();
+        }
+
+        slotsListenerRegistration = db.collection("slots").document("vaccine")
                 .collection(vaccineType)
                 .whereEqualTo("date", date)
                 .whereEqualTo("location", location)
                 .whereEqualTo("slotBooked", "false")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Toast.makeText(BookSlotsActivity.this, "Failed to fetch available slots", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (snapshot != null && !snapshot.isEmpty()) {
                         slotList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
                             Slot slot = document.toObject(Slot.class);
                             slotList.add(slot);
                         }
-                        slotAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(BookSlotsActivity.this, "Failed to fetch available slots", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BookSlotsActivity.this, "No slots available", Toast.LENGTH_SHORT).show();
+                        slotList.clear();
                     }
+                    slotAdapter.notifyDataSetChanged();
                 });
     }
 

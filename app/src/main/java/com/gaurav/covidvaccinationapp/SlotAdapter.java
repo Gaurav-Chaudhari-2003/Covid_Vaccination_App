@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder> {
 
@@ -16,7 +17,7 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
     private OnSlotClickListener onSlotClickListener;
 
     public SlotAdapter(List<Slot> slotList, OnSlotClickListener onSlotClickListener) {
-        this.slotList = slotList;
+        this.slotList = slotList != null ? slotList : List.of(); // Handle null slotList
         this.onSlotClickListener = onSlotClickListener;
     }
 
@@ -35,7 +36,11 @@ public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder
         holder.timeTextView.setText(slot.getTime());
         holder.locationTextView.setText(slot.getLocation());
 
-        holder.itemView.setOnClickListener(v -> onSlotClickListener.onSlotClick(slot));
+        holder.itemView.setOnClickListener(v -> {
+            if (onSlotClickListener != null) {
+                onSlotClickListener.onSlotClick(slot);
+            }
+        });
     }
 
     @Override
