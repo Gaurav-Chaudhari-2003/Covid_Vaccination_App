@@ -26,7 +26,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
         return new UserViewHolder(view);
     }
 
@@ -79,10 +79,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             if (vaccinated != null) {
                 Map<String, Object> covaxin = (Map<String, Object>) vaccinated.get("covaxin");
                 if (covaxin != null) {
-                    covaxinStatusTextView.setText("Covaxin: " + covaxin.get("status"));
-                    covaxinStatusTextView.setTextColor(covaxin.get("status").equals("booked") ?
-                            context.getResources().getColor(android.R.color.holo_blue_dark) :
-                            context.getResources().getColor(android.R.color.holo_red_dark));
+                    String covaxinStatus = (String) covaxin.get("status");
+                    covaxinStatusTextView.setText("Covaxin: " + covaxinStatus);
+
+                    if ("booked".equals(covaxinStatus)) {
+                        covaxinStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_orange_dark));
+                    } else if ("vaccinated".equals(covaxinStatus)) {
+                        covaxinStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_blue_dark));
+                    } else {
+                        covaxinStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
+                    }
                 } else {
                     covaxinStatusTextView.setText("Covaxin: Not vaccinated");
                     covaxinStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
@@ -90,10 +96,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
                 Map<String, Object> covishield = (Map<String, Object>) vaccinated.get("covishield");
                 if (covishield != null) {
-                    covishieldStatusTextView.setText("Covishield: " + covishield.get("status"));
-                    covishieldStatusTextView.setTextColor(covishield.get("status").equals("booked") ?
-                            context.getResources().getColor(android.R.color.holo_green_dark) :
-                            context.getResources().getColor(android.R.color.holo_red_dark));
+                    String covishieldStatus = (String) covishield.get("status");
+                    covishieldStatusTextView.setText("Covishield: " + covishieldStatus);
+
+                    if ("booked".equals(covishieldStatus)) {
+                        covishieldStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_orange_dark));
+                    } else if ("vaccinated".equals(covishieldStatus)) {
+                        covishieldStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_blue_dark));
+                    } else {
+                        covishieldStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
+                    }
                 } else {
                     covishieldStatusTextView.setText("Covishield: Not vaccinated");
                     covishieldStatusTextView.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
@@ -114,5 +126,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 }
             });
         }
+
     }
 }

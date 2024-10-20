@@ -9,12 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SlotAdapter extends RecyclerView.Adapter<SlotAdapter.SlotViewHolder> {
 
-    private List<Slot> slotList;
-    private OnSlotClickListener onSlotClickListener;
+    private final List<Slot> slotList;
+    private final OnSlotClickListener onSlotClickListener;
 
     public SlotAdapter(List<Slot> slotList, OnSlotClickListener onSlotClickListener) {
         this.slotList = slotList != null ? slotList : List.of(); // Handle null slotList

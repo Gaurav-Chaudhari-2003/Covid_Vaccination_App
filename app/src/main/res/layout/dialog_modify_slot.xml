@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/dateLabel"
@@ -12,26 +12,26 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Date"
-        android:textSize="18sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/dateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:inputType="date"
-        android:hint="Select date"
-        android:padding="8dp"
         android:background="@android:color/white"
+        android:gravity="center"
+        android:hint="Select date"
+        android:inputType="date"
+        android:padding="8dp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/dateLabel"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread" />
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateLabel" />
 
     <TextView
         android:id="@+id/startTimeLabel"
@@ -39,11 +39,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Start Time"
-        android:textSize="18sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/dateEditText"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/dateEditText" />
 
     <TextView
         android:id="@+id/startTimeEditText"
@@ -66,11 +66,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="End Time"
-        android:textSize="18sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/startTimeEditText"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/startTimeEditText" />
 
     <TextView
         android:id="@+id/endTimeEditText"
@@ -93,47 +93,47 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Location"
-        android:textSize="18sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/endTimeEditText"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/endTimeEditText" />
 
     <Spinner
         android:id="@+id/countrySpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/locationLabel"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread" />
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationLabel" />
 
     <Spinner
         android:id="@+id/stateSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/countrySpinner"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread" />
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countrySpinner" />
 
     <Spinner
         android:id="@+id/divisionSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/stateSpinner"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread" />
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stateSpinner" />
 
     <Spinner
         android:id="@+id/subdivisionSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/divisionSpinner"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread" />
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divisionSpinner" />
 
     <Button
         android:id="@+id/updateButton"
@@ -141,8 +141,8 @@
         android:layout_height="wrap_content"
         android:text="Update"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/subdivisionSpinner"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subdivisionSpinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>
