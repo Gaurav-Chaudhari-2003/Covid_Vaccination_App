@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
     private Button loginButton, registerButton;
+    private TextView forgotPasswordTextView;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.registerButton);
+        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -61,6 +64,17 @@ public class LoginActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        });
+
+        // Forgot password functionality
+        forgotPasswordTextView.setOnClickListener(v -> {
+            String email = emailEditText.getText().toString().trim();
+            if (TextUtils.isEmpty(email)) {
+                emailEditText.setError("Enter email");
+                return;
+            }
+
+            resetPassword(email);
         });
     }
 
@@ -101,5 +115,17 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "Error fetching user data", task.getException());
             }
         });
+    }
+
+    private void resetPassword(String email) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this, "Password reset email sent.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "sendPasswordResetEmail:failure", task.getException());
+                    }
+                });
     }
 }

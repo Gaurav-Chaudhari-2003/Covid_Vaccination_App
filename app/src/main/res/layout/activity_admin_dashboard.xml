@@ -15,7 +15,7 @@
         android:id="@+id/fetchUserRecordsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Fetch User Records" />
+        android:text="Verify User Vaccine" />
 
     <Button
         android:id="@+id/viewAllSlotsButton"
@@ -28,24 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="View All Users" />
-
-    <Button
-        android:id="@+id/deleteSlotButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete Slot" />
-
-    <Button
-        android:id="@+id/viewReportsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Reports" />
-
-    <Button
-        android:id="@+id/sendNotificationsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send Notifications" />
 
     <Button
         android:id="@+id/userDashboardButton"

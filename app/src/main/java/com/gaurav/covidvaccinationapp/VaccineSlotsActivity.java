@@ -42,8 +42,9 @@ public class VaccineSlotsActivity extends AppCompatActivity {
         covaxinSlotList = new ArrayList<>();
         covishieldSlotList = new ArrayList<>();
 
-        covaxinAdapter = new VaccineSlotAdapter(covaxinSlotList);
-        covishieldAdapter = new VaccineSlotAdapter(covishieldSlotList);
+        covaxinAdapter = new VaccineSlotAdapter(covaxinSlotList, firestore);
+        covishieldAdapter = new VaccineSlotAdapter(covishieldSlotList, firestore);
+
 
         covaxinRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         covaxinRecyclerView.setAdapter(covaxinAdapter);

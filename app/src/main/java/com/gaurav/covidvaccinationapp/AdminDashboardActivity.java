@@ -22,23 +22,17 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         // Initialize buttons
         Button addSlotButton = findViewById(R.id.addSlotButton);
-        Button fetchUserRecordsButton = findViewById(R.id.fetchUserRecordsButton);
+        Button verifyUserVaccine = findViewById(R.id.fetchUserRecordsButton);
         Button viewAllSlotsButton = findViewById(R.id.viewAllSlotsButton);
         Button viewAllUsersButton = findViewById(R.id.viewAllUsersButton);
-        Button deleteSlotButton = findViewById(R.id.deleteSlotButton);
-        Button viewReportsButton = findViewById(R.id.viewReportsButton);
-        Button sendNotificationsButton = findViewById(R.id.sendNotificationsButton);
         Button userDashboardButton = findViewById(R.id.userDashboardButton);
         Button logoutButton = findViewById(R.id.logoutButton);
 
         // Set up button click listeners
         addSlotButton.setOnClickListener(v -> navigateTo(AddSlotActivity.class));
-        fetchUserRecordsButton.setOnClickListener(v -> navigateTo(FetchUserRecordsActivity.class));
+        verifyUserVaccine.setOnClickListener(v -> navigateTo(FetchUserRecordsActivity.class));
         viewAllSlotsButton.setOnClickListener(v -> navigateTo(VaccineSlotsActivity.class));
         viewAllUsersButton.setOnClickListener(v -> navigateTo(ViewAllUsersActivity.class));
-        deleteSlotButton.setOnClickListener(v -> navigateTo(DeleteSlotActivity.class));
-        viewReportsButton.setOnClickListener(v -> navigateTo(ViewReportsActivity.class));
-        sendNotificationsButton.setOnClickListener(v -> navigateTo(SendNotificationsActivity.class));
         userDashboardButton.setOnClickListener(v -> navigateTo(UserDashboardActivity.class));
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();

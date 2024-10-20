@@ -127,7 +127,7 @@ public class BookSlotsActivity extends AppCompatActivity {
         String state = stateSpinner.getSelectedItem().toString();
         String division = divisionSpinner.getSelectedItem().toString();
         String subdivision = subdivisionSpinner.getSelectedItem().toString();
-        String location = country + "/" + state + "/" + division + "/" + subdivision;
+        String location = country + ", " + state + ", " + division + ", " + subdivision;
 
         if (TextUtils.isEmpty(date)) {
             Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
@@ -150,17 +150,20 @@ public class BookSlotsActivity extends AppCompatActivity {
                     }
 
                     if (snapshot != null && !snapshot.isEmpty()) {
-                        slotList.clear();
+                        slotList.clear();  // Clear previous list before adding new data
                         for (DocumentSnapshot document : snapshot.getDocuments()) {
-                            Slot slot = document.toObject(Slot.class);
+                            Slot slot = document.toObject(Slot.class);  // Convert each document to Slot
                             slotList.add(slot);
                         }
+                        // Notify adapter about data changes
+                        slotAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(BookSlotsActivity.this, "No slots available", Toast.LENGTH_SHORT).show();
                         slotList.clear();
+                        Toast.makeText(BookSlotsActivity.this, "No slots available", Toast.LENGTH_SHORT).show();
+                        slotAdapter.notifyDataSetChanged();  // Notify adapter that list is empty
                     }
-                    slotAdapter.notifyDataSetChanged();
                 });
+
     }
 
     private void bookSlot(Slot slot) {

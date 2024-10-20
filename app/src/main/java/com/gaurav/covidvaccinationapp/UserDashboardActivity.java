@@ -1,6 +1,7 @@
 package com.gaurav.covidvaccinationapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +27,6 @@ public class UserDashboardActivity extends AppCompatActivity {
 
         bookSlotsButton = findViewById(R.id.bookSlotsButton);
         viewBookedSlotsButton = findViewById(R.id.viewBookedSlotsButton);
-        vaccinationHistoryButton = findViewById(R.id.vaccinationHistoryButton);
-        notificationCenterButton = findViewById(R.id.notificationCenterButton);
         profileManagementButton = findViewById(R.id.profileManagementButton);
         helpSupportButton = findViewById(R.id.helpSupportButton);
         logoutButton = findViewById(R.id.logoutButton);
@@ -46,20 +45,6 @@ public class UserDashboardActivity extends AppCompatActivity {
             }
         });
 
-        vaccinationHistoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UserDashboardActivity.this, VaccinationHistoryActivity.class));
-            }
-        });
-
-        notificationCenterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UserDashboardActivity.this, NotificationCenterActivity.class));
-            }
-        });
-
         profileManagementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,9 +55,17 @@ public class UserDashboardActivity extends AppCompatActivity {
         helpSupportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserDashboardActivity.this, HelpSupportActivity.class));
+                // Create an intent to open the email app
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:chaudharigaurav177@gmail.com")); // Only email apps should handle this
+
+                // Set email subject and body (optional)
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Help & Support");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear Support Team,");
+                startActivity(emailIntent);
             }
         });
+
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override

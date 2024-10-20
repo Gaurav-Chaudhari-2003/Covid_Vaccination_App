@@ -24,20 +24,6 @@
             android:text="View Booked Slots" />
 
         <Button
-            android:id="@+id/vaccinationHistoryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Vaccination History" />
-
-        <Button
-            android:id="@+id/notificationCenterButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Notification Center" />
-
-        <Button
             android:id="@+id/profileManagementButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

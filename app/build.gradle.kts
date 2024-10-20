@@ -44,6 +44,8 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.messaging)
     implementation(libs.recyclerview)
+    implementation(libs.squareup.picasso)
+    implementation(libs.circleimageview)
     // For control over item selection of both touch and mouse driven selection
     implementation(libs.recyclerview.selection)
     testImplementation(libs.junit)
